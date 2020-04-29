@@ -20,10 +20,10 @@ async function createUser(request, response) {
 		const empty = isEmpty(user);
 		if (!empty) {
 			console.log("user already exists");
-			const data = user.results[0];
-			data.id = data.id.toString();
-			data.status = 0;
-			await response.json(data);
+			// const data = user.results[0];
+			// data.id = data.id.toString();
+			// data.status = 0;
+			await response.json("user already exists");
 			client.release();
 			return;
 		}
