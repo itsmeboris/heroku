@@ -87,20 +87,6 @@ function isEmpty(obj) {
 	return obj.results == undefined || obj.results.length == 0;
 }
 
-async function createTable(request, response) {
-	const client = await pool.connect();
-	await pool.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);", async (error, results) => {
-		if (error) {
-			console.log(err);
-			await response.send("Error " + err);
-			client.release();
-		}
-		await response.json(results.rows);
-		console.log(response);
-		client.release();
-	});
-}
-
 express()
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
@@ -136,7 +122,7 @@ express()
 		try {
 			console.log("enter");
 			const client = await pool.connect()
-			const result = await client.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);");
+			const result = await client.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11) NOT NULL CHECK (nickname <> ''), username VARCHAR(50) NOT NULL CHECK (username <> ''), password VARCHAR(200) NOT NULL CHECK (password <> ''), create_time TIMESTAMP NOT NULL, status SMALLINT NOT NULL);");
 			console.log(result);
 			const results = { 'results': (result) ? result.rows : null };
 			await res.json(results);
