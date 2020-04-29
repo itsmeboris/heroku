@@ -89,7 +89,7 @@ function isEmpty(obj) {
 
 async function createTable(request, response) {
 	const client = await pool.connect();
-	await pool.query("CREATE TABLE users(Id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT)", async (error, results) => {
+	await pool.query("CREATE TABLE users(Id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);", async (error, results) => {
 		if (error) {
 			console.log(err);
 			await response.send("Error " + err);
