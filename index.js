@@ -134,6 +134,7 @@ express()
 	})
 	.get('api/admin/createtable', async (req, res) => {
 		try {
+			console.log("enter");
 			const client = await pool.connect()
 			const result = await client.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);");
 			console.log(result);
