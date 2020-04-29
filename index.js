@@ -132,7 +132,7 @@ express()
 			client.release();
 		}
 	})
-	.get('api/admin/createtable', async (req, res) => {
+	.get('api/admin/ct', async (req, res) => {
 		try {
 			console.log("enter");
 			const client = await pool.connect()
