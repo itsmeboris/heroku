@@ -67,7 +67,7 @@ async function getUserByUserName(request) {
 	} catch (error) {
 		console.log('this is an error');
 		console.error(error);
-		return await JSON.parse({});
+		return await JSON.parse({ 'results': null });
 	}
 }
 
@@ -89,7 +89,7 @@ function isEmpty(obj) {
 
 async function createTable(request, response) {
 	const client = await pool.connect();
-	await pool.query("CREATE TABLE users(Id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);", async (error, results) => {
+	await pool.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);", async (error, results) => {
 		if (error) {
 			console.log(err);
 			await response.send("Error " + err);
@@ -132,6 +132,18 @@ express()
 			client.release();
 		}
 	})
-	.get('api/admin/createtable', createTable)
+	.get('api/admin/createtable', async (req, res) => {
+		try {
+			const client = await pool.connect()
+			const result = await client.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);");
+			const results = { 'results': (result) ? result.rows : null };
+			await res.json(results);
+			client.release();
+		} catch (err) {
+			console.error(err);
+			await res.send("Error " + err);
+			client.release();
+		}
+	})
 	.post('/api/users', createUser)
 	.listen(PORT, () => console.log(`Listening on ${PORT}`))
