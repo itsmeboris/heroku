@@ -136,6 +136,7 @@ express()
 		try {
 			const client = await pool.connect()
 			const result = await client.query("CREATE TABLE users(id SERIAL PRIMARY KEY, nickname VARCHAR(11), username VARCHAR(50), password VARCHAR(200), create_time TIMESTAMP, status SMALLINT);");
+			console.log(result);
 			const results = { 'results': (result) ? result.rows : null };
 			await res.json(results);
 			client.release();
